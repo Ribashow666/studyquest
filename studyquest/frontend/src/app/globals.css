@@ -14,10 +14,10 @@
   }
 
   body {
-    background-color: #0a0b0f;
+    background-color: #0e0f14;
     background-image:
-      radial-gradient(ellipse at 20% 20%, rgba(139, 92, 246, 0.04) 0%, transparent 50%),
-      radial-gradient(ellipse at 80% 80%, rgba(245, 200, 66, 0.03) 0%, transparent 50%);
+      radial-gradient(ellipse at 20% 20%, rgba(167, 139, 250, 0.06) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 80%, rgba(245, 200, 66, 0.04) 0%, transparent 50%);
     min-height: 100vh;
   }
 
@@ -26,23 +26,23 @@
   }
 
   ::-webkit-scrollbar-track {
-    background: #0a0b0f;
+    background: #0e0f14;
   }
 
   ::-webkit-scrollbar-thumb {
-    background: #1e2130;
+    background: #2e3347;
     border-radius: 3px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: #2d3248;
+    background: #3d4560;
   }
 }
 
 @layer components {
   .quest-card {
     @apply bg-quest-card border border-quest-border rounded-xl shadow-card;
-    background-image: linear-gradient(135deg, rgba(245,200,66,0.03) 0%, transparent 60%);
+    background-image: linear-gradient(135deg, rgba(245,200,66,0.04) 0%, transparent 60%);
   }
 
   .quest-btn-primary {
@@ -55,23 +55,25 @@
   .quest-btn-secondary {
     @apply border border-quest-border bg-quest-card text-quest-text font-body font-semibold
            px-6 py-3 rounded-lg transition-all duration-200
-           hover:border-quest-gold/40 hover:bg-quest-border active:scale-95
+           hover:border-quest-gold/50 hover:bg-quest-border active:scale-95
            disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
   .quest-input {
     @apply w-full bg-quest-bg border border-quest-border rounded-lg px-4 py-3
            text-quest-text font-body placeholder-quest-muted
-           focus:outline-none focus:border-quest-gold/60 focus:ring-1 focus:ring-quest-gold/30
+           focus:outline-none focus:border-quest-gold/70 focus:ring-1 focus:ring-quest-gold/40
            transition-colors duration-200;
   }
 
   .quest-label {
-    @apply text-quest-muted font-body text-sm font-medium uppercase tracking-wider mb-1.5 block;
+    @apply text-quest-muted font-body text-sm font-semibold uppercase tracking-wider mb-1.5 block;
   }
 
   .xp-bar-track {
     @apply h-3 bg-quest-border rounded-full overflow-hidden;
+    /* trilho mais visível */
+    background: #2e3347;
   }
 
   .xp-bar-fill {
@@ -94,18 +96,18 @@
   }
 
   .text-xp-gradient {
-    background: linear-gradient(90deg, #8b5cf6, #3b82f6);
+    background: linear-gradient(90deg, #a78bfa, #60a5fa);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
   .glow-gold {
-    box-shadow: 0 0 20px rgba(245,200,66,0.2), 0 0 40px rgba(245,200,66,0.05);
+    box-shadow: 0 0 24px rgba(245,200,66,0.22), 0 0 48px rgba(245,200,66,0.07);
   }
 
   .glow-purple {
-    box-shadow: 0 0 20px rgba(139,92,246,0.25);
+    box-shadow: 0 0 20px rgba(167,139,250,0.28);
   }
 
   .animate-slide-in {

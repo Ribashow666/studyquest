@@ -76,3 +76,6 @@ class User(Base):
     user_achievements: Mapped[list["UserAchievement"]] = relationship(
         "UserAchievement", back_populates="user", cascade="all, delete-orphan"
     )
+    notifications: Mapped[list["Notification"]] = relationship(
+    "Notification", back_populates="user", cascade="all, delete-orphan"
+)

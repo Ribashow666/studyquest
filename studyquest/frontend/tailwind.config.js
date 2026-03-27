@@ -14,31 +14,31 @@ module.exports = {
       },
       colors: {
         quest: {
-          bg: "#0a0b0f",
-          card: "#111318",
-          border: "#1e2130",
+          bg: "#0e0f14",        // levemente mais claro que #0a0b0f
+          card: "#1a1d26",      // era #111318 — mais visível
+          border: "#2e3347",    // era #1e2130 — borda bem mais visível
           gold: "#f5c842",
-          "gold-dim": "#a8891e",
+          "gold-dim": "#c9971f",
           amber: "#ff9f1c",
-          purple: "#8b5cf6",
-          "purple-dim": "#5b3fa0",
-          blue: "#3b82f6",
-          green: "#22c55e",
-          red: "#ef4444",
-          text: "#e2e8f0",
-          muted: "#64748b",
+          purple: "#a78bfa",    // era #8b5cf6 — mais claro/vibrante
+          "purple-dim": "#7c3aed",
+          blue: "#60a5fa",      // era #3b82f6 — mais claro
+          green: "#4ade80",     // era #22c55e — mais brilhante
+          red: "#f87171",       // era #ef4444 — mais legível
+          text: "#f1f5f9",      // era #e2e8f0 — quase branco
+          muted: "#94a3b8",     // era #64748b — bem mais legível
         },
       },
       backgroundImage: {
-        "quest-gradient": "linear-gradient(135deg, #0a0b0f 0%, #0f111a 50%, #0a0b0f 100%)",
+        "quest-gradient": "linear-gradient(135deg, #0e0f14 0%, #131620 50%, #0e0f14 100%)",
         "gold-gradient": "linear-gradient(90deg, #f5c842, #ff9f1c)",
-        "xp-gradient": "linear-gradient(90deg, #8b5cf6, #3b82f6)",
-        "card-glow": "linear-gradient(135deg, rgba(245,200,66,0.05) 0%, transparent 60%)",
+        "xp-gradient": "linear-gradient(90deg, #a78bfa, #60a5fa)",
+        "card-glow": "linear-gradient(135deg, rgba(245,200,66,0.06) 0%, transparent 60%)",
       },
       boxShadow: {
-        gold: "0 0 20px rgba(245,200,66,0.15), 0 0 40px rgba(245,200,66,0.05)",
-        purple: "0 0 20px rgba(139,92,246,0.2)",
-        card: "0 4px 24px rgba(0,0,0,0.4)",
+        gold: "0 0 24px rgba(245,200,66,0.2), 0 0 48px rgba(245,200,66,0.07)",
+        purple: "0 0 20px rgba(167,139,250,0.25)",
+        card: "0 4px 24px rgba(0,0,0,0.5)",
       },
       animation: {
         "pulse-gold": "pulse-gold 2s ease-in-out infinite",
@@ -51,7 +51,7 @@ module.exports = {
       keyframes: {
         "pulse-gold": {
           "0%, 100%": { boxShadow: "0 0 10px rgba(245,200,66,0.1)" },
-          "50%": { boxShadow: "0 0 25px rgba(245,200,66,0.3)" },
+          "50%": { boxShadow: "0 0 25px rgba(245,200,66,0.35)" },
         },
         float: {
           "0%, 100%": { transform: "translateY(0)" },
