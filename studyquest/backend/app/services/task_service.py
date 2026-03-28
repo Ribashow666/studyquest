@@ -3,19 +3,21 @@ from datetime import datetime, timezone
 from fastapi import HTTPException, status
 from sqlalchemy.orm import Session
 
-from app.models.task import Task
+from app.models.task import Task, TaskDifficulty
 from app.models.user import User
-from app.schemas.task import TaskCreate, TaskCompleteResponse, TaskResponse
+from app.schemas.task import TaskCreate, TaskCompleteResponse, TaskResponse, DIFFICULTY_XP
 from app.services.xp_service import apply_xp_gain
 from app.services.streak_service import update_streak
 from app.services.achievement_service import check_and_unlock_achievements
 
 
 def create_task(db: Session, user_id: int, data: TaskCreate) -> Task:
+    xp_reward = DIFFICULTY_XP[data.difficulty]
     task = Task(
         title=data.title,
         description=data.description,
-        xp_reward=data.xp_reward,
+        difficulty=data.difficulty,
+        xp_reward=xp_reward,
         user_id=user_id,
     )
     db.add(task)
@@ -61,7 +63,7 @@ def complete_task(db: Session, task_id: int, user: User) -> TaskCompleteResponse
     newly_unlocked = check_and_unlock_achievements(db, user)
 
     return TaskCompleteResponse(
-        task=TaskResponse.model_validate(task),
+        task=TaskResponse.from_orm(task),
         xp_gained=xp_result.actual_xp_gained,
         level_up=xp_result.leveled_up,
         new_level=user.level,

@@ -3,9 +3,11 @@
 import { Sword, LogOut, User } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export function Navbar() {
   const { user, logout } = useAuth();
+  const pathname = usePathname();
 
   return (
     <header className="sticky top-0 z-40 border-b border-quest-border bg-quest-bg/90 backdrop-blur-md">
@@ -22,14 +24,25 @@ export function Navbar() {
 
         {/* Right side */}
         {user && (
-          <div className="flex items-center gap-4">
-            <div className="hidden sm:flex items-center gap-2 text-sm font-body">
-              <div className="flex items-center gap-1.5 bg-quest-card border border-quest-gold/20 rounded-lg px-3 py-1.5">
-                <span className="text-quest-gold font-display font-bold">Lv.{user.level}</span>
-                <span className="text-quest-muted">·</span>
-                <span className="text-quest-muted">{user.name}</span>
-              </div>
+          <div className="flex items-center gap-3">
+            <div className="hidden sm:flex items-center gap-1.5 bg-quest-card border border-quest-gold/20 rounded-lg px-3 py-1.5 text-sm font-body">
+              <span className="text-quest-gold font-display font-bold">Lv.{user.level}</span>
+              <span className="text-quest-muted">·</span>
+              <span className="text-quest-muted">{user.name}</span>
             </div>
+
+            <Link
+              href="/profile"
+              title="Meu perfil"
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-sm font-body transition-colors
+                ${pathname === "/profile"
+                  ? "bg-quest-gold/10 text-quest-gold border border-quest-gold/30"
+                  : "text-quest-muted hover:text-quest-text"
+                }`}
+            >
+              <User className="w-4 h-4" />
+              <span className="hidden sm:block">Perfil</span>
+            </Link>
 
             <button
               onClick={logout}

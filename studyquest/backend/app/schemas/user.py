@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Optional
 from pydantic import BaseModel, EmailStr, Field
 from app.models.user import CharacterClass, CLASS_META
 
@@ -26,6 +27,17 @@ class CharacterClassInfo(BaseModel):
     icon: str
     description: str
     xp_multiplier: float
+
+
+class UpdateProfileRequest(BaseModel):
+    name: Optional[str] = Field(None, min_length=2, max_length=100)
+    email: Optional[EmailStr] = None
+    character_class: Optional[CharacterClass] = None
+
+
+class UpdatePasswordRequest(BaseModel):
+    current_password: str
+    new_password: str = Field(..., min_length=6, max_length=128)
 
 
 class UserResponse(BaseModel):

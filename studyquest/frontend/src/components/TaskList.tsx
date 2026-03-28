@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { CheckCircle2, Circle, Plus, Loader2, Zap, X, ChevronDown, ChevronUp } from "lucide-react";
-import type { Task, TaskCompleteResponse, CreateTaskPayload } from "@/types";
+import { CheckCircle2, Circle, Plus, Loader2, X, ChevronDown, ChevronUp } from "lucide-react";
+import type { Task, TaskCompleteResponse, CreateTaskPayload, TaskDifficulty } from "@/types";
 import { createTask, completeTask } from "@/lib/api";
 
 interface TaskListProps {
@@ -10,6 +10,13 @@ interface TaskListProps {
   onTaskComplete: (result: TaskCompleteResponse) => void;
   onTaskCreated: (task: Task) => void;
 }
+
+const DIFFICULTIES: { key: TaskDifficulty; label: string; icon: string; xp: number; description: string }[] = [
+  { key: "easy",      label: "Fácil",    icon: "🟢", xp: 25,  description: "Revisão rápida, leitura leve" },
+  { key: "medium",    label: "Médio",    icon: "🟡", xp: 50,  description: "Estudo focado, exercícios" },
+  { key: "hard",      label: "Difícil",  icon: "🔴", xp: 100, description: "Problema complexo, projeto" },
+  { key: "legendary", label: "Lendário", icon: "💀", xp: 200, description: "Desafio épico, maratona" },
+];
 
 export function TaskList({ tasks, onTaskComplete, onTaskCreated }: TaskListProps) {
   const [showCreateForm, setShowCreateForm] = useState(false);
@@ -109,6 +116,16 @@ export function TaskList({ tasks, onTaskComplete, onTaskCreated }: TaskListProps
 
 // ── TaskItem ──────────────────────────────────────────────────────────────────
 
+function difficultyColor(difficulty: string) {
+  switch (difficulty) {
+    case "easy":      return "text-quest-green";
+    case "medium":    return "text-quest-gold";
+    case "hard":      return "text-quest-red";
+    case "legendary": return "text-quest-purple";
+    default:          return "text-quest-muted";
+  }
+}
+
 function TaskItem({
   task,
   onComplete,
@@ -122,6 +139,9 @@ function TaskItem({
   disabled?: boolean;
   style?: React.CSSProperties;
 }) {
+  const icon = task.difficulty_icon ?? "🟡";
+  const xpColor = difficultyColor(task.difficulty);
+
   return (
     <div
       className={`flex items-center gap-3 p-3 rounded-xl border transition-all duration-200 animate-slide-in
@@ -158,9 +178,9 @@ function TaskItem({
         )}
       </div>
 
-      <div className="flex items-center gap-1 flex-shrink-0">
-        <Zap className="w-3.5 h-3.5 text-quest-purple" />
-        <span className="font-mono text-sm font-bold text-quest-purple">{task.xp_reward}</span>
+      <div className="flex items-center gap-1.5 flex-shrink-0">
+        <span className="text-base">{icon}</span>
+        <span className={`font-mono text-sm font-bold ${xpColor}`}>+{task.xp_reward} XP</span>
       </div>
     </div>
   );
@@ -171,7 +191,7 @@ function TaskItem({
 function CreateTaskForm({ onCreated }: { onCreated: (t: Task) => void }) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [xpReward, setXpReward] = useState(50);
+  const [difficulty, setDifficulty] = useState<TaskDifficulty>("medium");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -183,7 +203,7 @@ function CreateTaskForm({ onCreated }: { onCreated: (t: Task) => void }) {
       const payload: CreateTaskPayload = {
         title: title.trim(),
         description: description.trim() || undefined,
-        xp_reward: xpReward,
+        difficulty,
       };
       const task = await createTask(payload);
       onCreated(task);
@@ -219,19 +239,28 @@ function CreateTaskForm({ onCreated }: { onCreated: (t: Task) => void }) {
       </div>
 
       <div>
-        <label className="quest-label">Recompensa de XP: <span className="text-quest-purple font-mono">{xpReward} XP</span></label>
-        <input
-          type="range"
-          min={10}
-          max={500}
-          step={10}
-          value={xpReward}
-          onChange={(e) => setXpReward(Number(e.target.value))}
-          className="w-full accent-purple-500 cursor-pointer"
-        />
-        <div className="flex justify-between text-xs text-quest-muted font-mono mt-1">
-          <span>10</span>
-          <span>500</span>
+        <label className="quest-label">Dificuldade</label>
+        <div className="grid grid-cols-2 gap-2 mt-1">
+          {DIFFICULTIES.map((d) => (
+            <button
+              key={d.key}
+              type="button"
+              onClick={() => setDifficulty(d.key)}
+              className={`flex items-center gap-2.5 p-3 rounded-xl border text-left transition-all duration-200
+                ${difficulty === d.key
+                  ? "border-quest-gold/60 bg-quest-gold/8"
+                  : "border-quest-border bg-quest-card hover:border-quest-border/80"
+                }`}
+            >
+              <span className="text-xl">{d.icon}</span>
+              <div>
+                <p className={`font-body font-bold text-sm ${difficulty === d.key ? "text-quest-gold" : "text-quest-text"}`}>
+                  {d.label}
+                </p>
+                <p className="text-xs text-quest-muted font-mono">+{d.xp} XP</p>
+              </div>
+            </button>
+          ))}
         </div>
       </div>
 

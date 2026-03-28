@@ -24,6 +24,9 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: "StudyQuest — Level Up Your Knowledge",
   description: "Gamified study platform. Earn XP, level up, and unlock achievements.",
+  icons: {
+  icon: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

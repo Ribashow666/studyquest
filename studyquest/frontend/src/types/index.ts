@@ -14,15 +14,42 @@ export interface User {
   total_xp: number;
   streak: number;
   created_at: string;
+  character_class: string;
+  class_label: string;
+  class_icon: string;
   xp_for_next_level: number;
   xp_progress_percent: number;
 }
 
+export interface UpdateProfilePayload {
+  name?: string;
+  email?: string;
+  character_class?: string;
+}
+
+export interface UpdatePasswordPayload {
+  current_password: string;
+  new_password: string;
+}
+
+export interface CharacterClass {
+  key: string;
+  label: string;
+  icon: string;
+  description: string;
+  xp_multiplier: number;
+}
+
 // ── Tasks ─────────────────────────────────────────────────────────────────────
+export type TaskDifficulty = "easy" | "medium" | "hard" | "legendary";
+
 export interface Task {
   id: number;
   title: string;
   description: string | null;
+  difficulty: TaskDifficulty;
+  difficulty_label: string;
+  difficulty_icon: string;
   xp_reward: number;
   completed: boolean;
   completed_at: string | null;
@@ -43,7 +70,7 @@ export interface TaskCompleteResponse {
 export interface CreateTaskPayload {
   title: string;
   description?: string;
-  xp_reward: number;
+  difficulty: TaskDifficulty;
 }
 
 // ── Achievements ──────────────────────────────────────────────────────────────

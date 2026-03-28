@@ -5,9 +5,13 @@ import type {
   TaskCompleteResponse,
   CreateTaskPayload,
   Achievement,
+  UpdateProfilePayload,
+  UpdatePasswordPayload,
+  CharacterClass,
 } from "@/types";
 
 const BASE_URL = "/api";
+
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
 function getToken(): string | null {
@@ -38,6 +42,7 @@ async function request<T>(
     throw new Error(err.detail || `HTTP ${res.status}`);
   }
 
+  if (res.status === 204) return undefined as T;
   return res.json() as Promise<T>;
 }
 
@@ -68,6 +73,24 @@ export async function login(
 
 export async function getMe(): Promise<User> {
   return request<User>("/users/me", {}, true);
+}
+
+export async function updateProfile(payload: UpdateProfilePayload): Promise<User> {
+  return request<User>("/users/me", {
+    method: "PATCH",
+    body: JSON.stringify(payload),
+  }, true);
+}
+
+export async function updatePassword(payload: UpdatePasswordPayload): Promise<void> {
+  return request<void>("/users/me/password", {
+    method: "PATCH",
+    body: JSON.stringify(payload),
+  }, true);
+}
+
+export async function getClasses(): Promise<CharacterClass[]> {
+  return request<CharacterClass[]>("/classes", {}, true);
 }
 
 // ── Tasks ─────────────────────────────────────────────────────────────────────

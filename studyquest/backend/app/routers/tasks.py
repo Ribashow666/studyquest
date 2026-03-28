@@ -16,7 +16,8 @@ def create(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    return create_task(db, current_user.id, data)
+    task = create_task(db, current_user.id, data)
+    return TaskResponse.from_orm(task)
 
 
 @router.get("", response_model=list[TaskResponse])
@@ -24,7 +25,8 @@ def list_all(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    return list_tasks(db, current_user.id)
+    tasks = list_tasks(db, current_user.id)
+    return [TaskResponse.from_orm(t) for t in tasks]
 
 
 @router.patch("/{task_id}/complete", response_model=TaskCompleteResponse)
