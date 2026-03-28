@@ -1,15 +1,22 @@
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.httpsredirect import HTTPSRedirectMiddleware
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.util import get_remote_address
+from slowapi.errors import RateLimitExceeded
 
 from app.core.database import engine, Base
+from app.core.config import settings
 from app.routers import (
     auth_router, users_router, tasks_router,
     achievements_router, ranking_router, notifications_router, classes_router,
 )
 
 import app.models  # noqa: F401
+
+limiter = Limiter(key_func=get_remote_address, default_limits=["200/minute"])
 
 
 @asynccontextmanager
@@ -27,10 +34,18 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(
     title="StudyQuest API",
-    description="🎮 Gamified study platform — level up your knowledge",
+    description="Gamified study platform",
     version="2.0.0",
     lifespan=lifespan,
+    docs_url="/docs" if settings.DEBUG else None,
+    redoc_url="/redoc" if settings.DEBUG else None,
 )
+
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+
+if not settings.DEBUG:
+    app.add_middleware(HTTPSRedirectMiddleware)
 
 app.add_middleware(
     CORSMiddleware,
@@ -56,7 +71,7 @@ app.include_router(classes_router)
 
 @app.get("/", tags=["Health"])
 def root():
-    return {"status": "ok", "message": "StudyQuest API is running 🚀", "version": "2.0.0"}
+    return {"status": "ok", "message": "StudyQuest API is running", "version": "2.0.0"}
 
 
 @app.get("/health", tags=["Health"])

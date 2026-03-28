@@ -289,7 +289,7 @@ export default function ProfilePage() {
                 type="password"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
-                placeholder="Mínimo 6 caracteres"
+                placeholder="Mínimo 8 caracteres (maiúscula, minúscula e número)"
                 className="quest-input"
                 minLength={6}
                 required

@@ -1,14 +1,25 @@
 from datetime import datetime
 from typing import Optional
-from pydantic import BaseModel, EmailStr, Field
+from pydantic import BaseModel, EmailStr, Field, field_validator
 from app.models.user import CharacterClass, CLASS_META
 
 
 class RegisterRequest(BaseModel):
     name: str = Field(..., min_length=2, max_length=100)
     email: EmailStr
-    password: str = Field(..., min_length=6, max_length=128)
+    password: str = Field(..., min_length=8, max_length=128)
     character_class: CharacterClass = CharacterClass.SAGE
+
+    @field_validator("password")
+    @classmethod
+    def password_strength(cls, v: str) -> str:
+        if not any(c.isupper() for c in v):
+            raise ValueError("A senha deve conter ao menos uma letra maiúscula")
+        if not any(c.islower() for c in v):
+            raise ValueError("A senha deve conter ao menos uma letra minúscula")
+        if not any(c.isdigit() for c in v):
+            raise ValueError("A senha deve conter ao menos um número")
+        return v
 
 
 class LoginRequest(BaseModel):

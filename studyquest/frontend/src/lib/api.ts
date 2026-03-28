@@ -42,8 +42,15 @@ async function request<T>(
   const res = await fetch(`${BASE_URL}${path}`, { ...options, headers });
 
   if (!res.ok) {
-    const err = await res.json().catch(() => ({ detail: "Unknown error" }));
-    throw new Error(err.detail || `HTTP ${res.status}`);
+    const err = await res.json().catch(() => ({ detail: "Erro desconhecido" }));
+    if (Array.isArray(err.detail)) {
+      const msgs = err.detail.map((e: any) => {
+        const msg = e.msg || "Erro de validação";
+        return msg.replace("Value error, ", "").replace("String should have at least", "Mínimo de").replace("characters", "caracteres");
+      });
+      throw new Error(msgs.join(". "));
+    }
+    throw new Error(typeof err.detail === "string" ? err.detail : "Erro desconhecido");
   }
 
   if (res.status === 204) return undefined as T;

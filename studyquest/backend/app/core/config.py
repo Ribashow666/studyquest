@@ -7,6 +7,16 @@ class Settings(BaseSettings):
     SECRET_KEY: str = "change-this-secret-key-in-production"
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 10080  # 7 days
+    DEBUG: bool = True
+
+    # Email
+    RESEND_API_KEY: str = ""
+    EMAIL_FROM: str = "onboarding@resend.dev"
+    FRONTEND_URL: str = "http://localhost:3000"
+
+    # Gmail SMTP
+    GMAIL_USER: str = ""
+    GMAIL_APP_PASSWORD: str = ""
 
     class Config:
         env_file = ".env"

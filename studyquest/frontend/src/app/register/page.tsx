@@ -96,7 +96,7 @@ export default function RegisterPage() {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                placeholder="Mínimo 6 caracteres"
+                placeholder="Mínimo 8 caracteres (maiúscula, minúscula e número)"
                 required
                 minLength={6}
                 className="quest-input"

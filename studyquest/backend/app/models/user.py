@@ -1,17 +1,17 @@
 from datetime import datetime, timezone
 from enum import Enum as PyEnum
-from sqlalchemy import String, Integer, Float, DateTime, Enum
+from sqlalchemy import String, Integer, Float, DateTime, Enum, Boolean
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.core.database import Base
 
 
 class CharacterClass(str, PyEnum):
-    SAGE      = "sage"       # Sábio      — bônus em tarefas teóricas
-    EXECUTOR  = "executor"   # Executor   — bônus em tarefas práticas
-    WARRIOR   = "warrior"    # Guerreiro  — bônus em streak
-    MAGE      = "mage"       # Mago       — bônus XP geral
-    EXPLORER  = "explorer"   # Explorador — bônus em novas áreas
+    SAGE      = "sage"
+    EXECUTOR  = "executor"
+    WARRIOR   = "warrior"
+    MAGE      = "mage"
+    EXPLORER  = "explorer"
 
 
 CLASS_XP_MULTIPLIER: dict[CharacterClass, float] = {
@@ -72,10 +72,14 @@ class User(Base):
         nullable=False,
     )
 
+    # Email verification
+    is_verified: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+    verification_token: Mapped[str | None] = mapped_column(String(255), nullable=True)
+
     tasks: Mapped[list["Task"]] = relationship("Task", back_populates="user", cascade="all, delete-orphan")
     user_achievements: Mapped[list["UserAchievement"]] = relationship(
         "UserAchievement", back_populates="user", cascade="all, delete-orphan"
     )
     notifications: Mapped[list["Notification"]] = relationship(
-    "Notification", back_populates="user", cascade="all, delete-orphan"
-)
+        "Notification", back_populates="user", cascade="all, delete-orphan"
+    )
