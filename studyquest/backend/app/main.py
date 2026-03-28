@@ -34,6 +34,10 @@ async def lifespan(app: FastAPI):
             ALTER TABLE users
             ADD COLUMN IF NOT EXISTS verification_token VARCHAR(255)
         """))
+        # Marca usuários existentes como verificados
+        conn.execute(text("""
+            UPDATE users SET is_verified = TRUE WHERE is_verified = FALSE AND verification_token IS NULL
+        """))
         conn.commit()
 
     from app.core.database import SessionLocal
