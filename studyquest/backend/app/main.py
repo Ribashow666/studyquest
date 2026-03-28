@@ -38,8 +38,7 @@ app.add_middleware(
         "http://localhost:3000",
         "http://127.0.0.1:3000",
         "https://studyquest-backend.onrender.com",
-        # Adicione aqui a URL do Vercel quando tiver, ex:
-        # "https://studyquest.vercel.app",
+        "https://studyquest-rho.vercel.app",
     ],
     allow_credentials=True,
     allow_methods=["*"],
