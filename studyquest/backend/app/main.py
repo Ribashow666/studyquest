@@ -22,6 +22,20 @@ limiter = Limiter(key_func=get_remote_address, default_limits=["200/minute"])
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     Base.metadata.create_all(bind=engine)
+
+    # Migrations manuais para colunas novas
+    from sqlalchemy import text
+    with engine.connect() as conn:
+        conn.execute(text("""
+            ALTER TABLE users
+            ADD COLUMN IF NOT EXISTS is_verified BOOLEAN NOT NULL DEFAULT FALSE
+        """))
+        conn.execute(text("""
+            ALTER TABLE users
+            ADD COLUMN IF NOT EXISTS verification_token VARCHAR(255)
+        """))
+        conn.commit()
+
     from app.core.database import SessionLocal
     from app.services.achievement_service import seed_achievements
     db = SessionLocal()
