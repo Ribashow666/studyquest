@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Cinzel, Rajdhani, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/lib/auth-context";
+import { Footer } from "@/components/Footer";
 
 const cinzel = Cinzel({
   subsets: ["latin"],
@@ -25,15 +26,20 @@ export const metadata: Metadata = {
   title: "StudyQuest — Level Up Your Knowledge",
   description: "Gamified study platform. Earn XP, level up, and unlock achievements.",
   icons: {
-  icon: "/favicon.ico",
+    icon: "/favicon.ico",
   },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="pt-BR" className={`${cinzel.variable} ${rajdhani.variable} ${jetbrainsMono.variable}`}>
-      <body className="bg-quest-bg text-quest-text font-body antialiased min-h-screen">
-        <AuthProvider>{children}</AuthProvider>
+      <body className="bg-quest-bg text-quest-text font-body antialiased min-h-screen flex flex-col">
+        <AuthProvider>
+          <div className="flex-1">
+            {children}
+          </div>
+          <Footer />
+        </AuthProvider>
       </body>
     </html>
   );
