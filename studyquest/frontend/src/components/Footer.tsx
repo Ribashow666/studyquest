@@ -32,7 +32,7 @@ export function Footer() {
           </a>
 
           <a
-            href="https://www.linkedin.com/in/ailton-ribas"
+            href="https://www.linkedin.com/in/ailton-guilherme"
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-1.5 text-quest-muted hover:text-quest-text transition-colors text-sm font-body"
